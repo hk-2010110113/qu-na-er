@@ -5,7 +5,7 @@
         <div class="title border-topbottom">当前城市</div>
         <div class="button-list">
           <div class="button-wrapper">
-            <div class="button">北京</div>
+            <div class="button">{{currentCity}}</div>
           </div>
         </div>
       </div>
@@ -14,7 +14,7 @@
         <div class="title border-topbottom">热门城市</div>
         <div class="button-list">
           <div class="button-wrapper" v-for="item in hotCities" :key="item.id">
-            <div class="button">{{item.name}}</div>
+            <div class="button" @click="handleCityClick">{{item.name}}</div>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
       <div class="area" v-for="(item,key) of cities" :key="key" :ref="key">
         <div class="title border-topbottom">{{key}}</div>
         <div class="item-list">
-          <div class="item border-bottom" v-for="ite in item" :key="ite.id">{{ite.name}}</div>
+          <div class="item border-bottom" @click="handleCityClick" v-for="ite in item" :key="ite.id">{{ite.name}}</div>
         </div>
       </div>
     </div>
@@ -31,6 +31,7 @@
 </template>
 <script>
 import BScroll from "better-scroll";
+import {mapState,mapMutations} from 'vuex'
 // import BScroll from "@better-scroll/core";
 // import Pullup from "@better-scroll/pull-up";
 // BScroll.use(Pullup);
@@ -55,12 +56,12 @@ export default {
     };
   },
   computed: {
-    // cities(){
-    //   return this.citylists.cities
+    // city(){
+    //   return this.$store.state.city
     // },
-    // hotCities(){
-    //   return this.citylists.hotCities
-    // }
+    ...mapState({
+      currentCity:'city'
+    })
   },
   mounted() {
     this.bscroll();
@@ -81,7 +82,13 @@ export default {
     },
     currentTarget(val){
       this.target = val;
-    }
+    },
+    handleCityClick(e){
+      //this.$store.commit('increment',e.target.innerHTML)
+      this.increment(e.target.innerHTML)
+      this.$router.push('/')
+    },
+    ...mapMutations(['increment'])
   },
   watch:{
     letter(){

@@ -5,17 +5,16 @@
     </div>
     <div class="header-input"><span class="iconfont">&#xe632;</span>输入城市景点</div>
     <!-- <div class="header-right">{{city}}<span class="iconfont arrow-icon">&#xe64a;</span></div> -->
-    <router-link to="/city" tag="div" class="header-right">{{city}}<span class="iconfont arrow-icon">&#xe64a;</span></router-link>
+    <router-link to="/city" tag="div" class="header-right">{{this.city}}<span class="iconfont arrow-icon">&#xe64a;</span></router-link>
   </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'Header',
-  props:{
-    city:{
-      type:String
-    }
-  }
+  computed: {
+    ...mapState(['city'])
+  },
 }
 </script>
 <style lang="stylus" scoped>
@@ -43,7 +42,8 @@ export default {
     border-radius .1rem
     color #ccc
   .header-right
-    width 1.24rem
+    min-width 1.04rem
+    padding 0 .1rem
     float right
     text-align center
     .arrow-icon
