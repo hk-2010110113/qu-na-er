@@ -15,6 +15,7 @@ import HomeIcons from "./components/Icons";
 import HomeRecommend from "./components/Recommend";
 import HomeWeeked from "./components/Weeked";
 import { getHomeMultidata } from "@/request/home";
+import { mapState } from 'vuex'
 export default {
   name: "Home",
   data() {
@@ -23,7 +24,8 @@ export default {
       iconList: [],
       recommendList: [],
       swiperList: [],
-      weekedList: []
+      weekedList: [],
+      lastCity:''
     };
   },
   components: {
@@ -34,11 +36,15 @@ export default {
     HomeWeeked
   },
   mounted() {
+    this.lastCity = this.city
     this.getHomeInfo();
+  },
+  computed: {
+    ...mapState(['city'])
   },
   methods: {
     getHomeInfo() {
-      getHomeMultidata().then(res => {
+      getHomeMultidata({city:this.city}).then(res => {
         // this.city = res.data.city
         this.iconList = res.data.iconList;
         this.recommendList = res.data.recommendList;
@@ -46,7 +52,13 @@ export default {
         this.weekedList = res.data.weekedList;
       });
     }
-  }
+  },
+  activated() {
+    if(this.lastCity !==this.city){
+      this.lastCity = this.city
+      this.getHomeInfo()
+    }
+  },
 };
 </script>
 <style lang='stylus' scoped></style>
